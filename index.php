@@ -21,7 +21,7 @@ class zboom_social_share_button extends WP_Widget{
 			$title 		= $instance['title'] ? $instance['title'] : 'Social Media';
 			
 
-			$design = get_option('rj_desing') ? get_option('rj_desing') : 'square' ;
+			$design = get_option('rj_smw_style') ? get_option('rj_smw_style') : 'square' ;
 
 			//====================== set default link =========================
 			
@@ -251,7 +251,7 @@ function smw_is_bg_callback(){
 }
 
 function smw_icon_style_callback(){
-	$icon_style = get_option("");
+	$icon_style = get_option("rj_smw_style");
 	if($icon_style == 'circle'){
 		$circle = "selected";
 	}else if($icon_style == 'square') {
@@ -261,7 +261,7 @@ function smw_icon_style_callback(){
 		$square = '';
 	}
 	?>
-	<select name="rj_smw_is_bg">
+	<select name="rj_smw_style">
 		<option value="circle" <?php echo $circle; ?>>Circle</option>
 		<option value="square" <?php echo $square; ?>>Square</option>
 	</select>
@@ -321,7 +321,7 @@ function show_youtube_callback(){
 function design_alert_callback(){
 	echo "<h4>Select a design thats you like.</h4>";
 }
-
+/*
 function default_callback(){
 	$design = esc_html(get_option('rj_desing')) ? esc_html(get_option('rj_desing')): 'square';
 
@@ -335,7 +335,7 @@ function default_callback(){
 		<input <?php if($design == 'samebg'){ echo 'checked'; } ?> type="radio" name="rj_desing" value="samebg" />
 		<img src="<?php echo plugin_dir_url(__FILE__).'img/samebg.png' ?>" /><br>
 	<?php 
-}
+}*/
 /*
 ===========================================================================================================
 :::::::::::::::::::::::::::::::::::::::: SEND CALLBACK FUNCTION ::::::::::::::::::::::::::::::::::::::::::::
@@ -384,6 +384,7 @@ function rj_smw_add_css(){
 		ul.rj_smw li a i.fa {
 			background: <?php echo $bg; ?>;
 		}
+		
 
 	</style>
 
