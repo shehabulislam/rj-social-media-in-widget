@@ -52,11 +52,11 @@ class zboom_social_share_button extends WP_Widget{
 			
 			echo $args['before_widget'];
 			echo $args['before_title'].$title.$args['after_title'];
-			echo "<div class='rj'>";
-			echo "<ul class='".$design."'>";
+			//echo "<div class='rj'>";
+			echo "<ul class='".$design." rj_smw'>";
 			echo $link;
 			echo "</ul>";
-			echo "</div>";
+			//echo "</div>";
 			echo $args['after_widget'];
 			
 	}
@@ -81,7 +81,7 @@ function zboom_social_share_button(){
 add_action('widgets_init', 'zboom_social_share_button');
 
 
-function rj_register_font_awesome_other(){
+function rj_smw_assets(){
 	$plugin_dir = dirname(__FILE__);
 	wp_enqueue_style('rj_font_awesome', plugin_dir_url(__FILE__).'css/font-awesome.min.css');
 	wp_enqueue_style('rj_css', plugin_dir_url(__FILE__).'css/style.css');
@@ -91,8 +91,18 @@ function rj_register_font_awesome_other(){
 	wp_enqueue_script('imageupload', plugin_dir_url(__FILE__).'js/main.js');
 	
 }
-add_action('wp_enqueue_scripts', 'rj_register_font_awesome_other');
-add_action('admin_enqueue_scripts', 'rj_register_font_awesome_other');
+add_action('wp_enqueue_scripts', 'rj_smw_assets');
+
+function rj_smw_admin_assets($hook){
+	//if($hook == "toplevel_page_rj_social_option"){
+
+
+		wp_enqueue_script("rj_smw-tiny-color-picker", plugin_dir_url(__FILE__)."assets/admin/color-picker/jqColorPicker.min.js", array('jquery'), '', true);
+		wp_enqueue_script("rj_smw-color-picker-main", plugin_dir_url(__FILE__)."assets/admin/color-picker/main.js", array('jquery', 'rj_smw-tiny-color-picker'), '', true);
+	//}
+
+}
+add_action('admin_enqueue_scripts', 'rj_smw_admin_assets');
 
 
 
@@ -103,6 +113,19 @@ add_action('admin_enqueue_scripts', 'rj_register_font_awesome_other');
 
 
 function Rj_register_field_for_social_media(){
+
+	// icon style
+	add_settings_field('rj_smw_style', 'Icon Style', 'smw_icon_style_callback', 'rj_social_option', 'rj_send_field');	
+	register_setting('rj_send_field', 'rj_smw_style');
+
+	// Social Media Icon Background color pick
+	add_settings_field('rj_smw_is_bg', 'Custom Icon Background Color', 'smw_is_bg_callback', 'rj_social_option', 'rj_send_field');	
+	register_setting('rj_send_field', 'rj_smw_is_bg');
+
+	add_settings_field('rj_smw_bg', 'Select Background Color', 'smw_bg_callback', 'rj_social_option', 'rj_send_field');	
+	register_setting('rj_send_field', 'rj_smw_bg');
+
+	//
 	add_settings_section('rj_send_field', 'Add Social media profile in widget', 'rj_send_callback', 'rj_social_option');
 	
 	add_settings_field('rj_facebook', 'Facebook profile link', 'facebook_callback','rj_social_option', 'rj_send_field');	
@@ -122,6 +145,8 @@ function Rj_register_field_for_social_media(){
 
 	add_settings_field('rj_youtube', 'Youtube chanel link', 'youtube_callback', 'rj_social_option', 'rj_send_field');	
 	register_setting('rj_send_field', 'rj_youtube');
+
+	
 
 	// ========================== show callback field =====================================
 	//==========================================================================================
@@ -198,6 +223,48 @@ function pinterest_callback(){ ?>
 // Pinterest Text Callback function
 function youtube_callback(){ ?>
 	<input type="text" name="rj_youtube" value="<?php echo esc_url(get_option('rj_youtube')); ?>" class="regular-text" />
+<?php
+}
+
+// Background color select callback
+function smw_bg_callback(){ ?>
+	<input type="text" name="rj_smw_bg" value="<?php echo get_option('rj_smw_bg'); ?>" class="regular-text color-picker" />
+<?php
+}
+// Background color select callback
+function smw_is_bg_callback(){ 
+	$custom_bg = get_option("rj_smw_is_bg");
+	if($custom_bg == 'true'){
+		$true = "selected";
+	}else if($custom_bg == 'false') {
+		$false = "selected";
+	}else {
+		$true = '';
+		$false = '';
+	}
+	?>
+	<select name="rj_smw_is_bg">
+		<option value="true" <?php echo $true; ?>>True</option>
+		<option value="false" <?php echo $false; ?>>False</option>
+	</select>
+<?php
+}
+
+function smw_icon_style_callback(){
+	$icon_style = get_option("");
+	if($icon_style == 'circle'){
+		$circle = "selected";
+	}else if($icon_style == 'square') {
+		$square = "selected";
+	}else {
+		$circle = '';
+		$square = '';
+	}
+	?>
+	<select name="rj_smw_is_bg">
+		<option value="circle" <?php echo $circle; ?>>Circle</option>
+		<option value="square" <?php echo $square; ?>>Square</option>
+	</select>
 <?php
 }
 
@@ -303,3 +370,24 @@ function Rj_menu_callback(){ ?>
 	
 	<?php
 }
+
+function rj_smw_add_css(){
+
+	echo $custom_bg = get_option("rj_smw_is_bg");
+	if($custom_bg == 'true'){
+		$bg = get_option('rj_smw_bg');
+	}else {
+		$bg = '';
+	}
+	?>
+	<style>
+		ul.rj_smw li a i.fa {
+			background: <?php echo $bg; ?>;
+		}
+
+	</style>
+
+	<?php
+	echo $custom_bg;
+}
+add_action("wp_head", "rj_smw_add_css");
