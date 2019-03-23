@@ -5,7 +5,7 @@ Plugin URI: http://www.bestthemestar.com
 Author: Shehabul Islam Raju
 Author URI: http://www.facebook.com/msiraju12
 Description: This is social media plugin that's help you to set social media button to your sidebar
-Version: 1.0
+Version: 1.5.0
 */
 
 
@@ -13,7 +13,7 @@ class zboom_social_share_button extends WP_Widget{
 
 	public function __construct(){
 
-		parent::__construct('zboom_social_share_button', 'Social Media', array('description' => 'go to social option and checked input which profile you want show'));
+		parent::__construct('zboom_social_share_button', 'RJ Social Link', array('description' => 'go to "RJ smw Options" and filled url which you want to show'));
 	}
 
 	public function widget($args, $instance){
@@ -25,30 +25,29 @@ class zboom_social_share_button extends WP_Widget{
 
 			//====================== set default link =========================
 			
+			$facebook = esc_url(get_option("rj_facebook"));
+			$twitter = esc_url(get_option("rj_twitter"));
+			$linkedin = esc_url(get_option("rj_linkedin"));
+			$google = esc_url(get_option("rj_google_plus"));
+			$pinterest = esc_url(get_option("rj_pinterest"));
+			$youtube = esc_url(get_option("rj_youtube"));
+			$tumblr = esc_url(get_option("rj_tumblr"));
+			$reddit = esc_url(get_option("rj_reddit"));
+			$skype = esc_url(get_option("rj_skype"));
+			$flickr = esc_url(get_option("rj_flickr"));
 
-			$youtube = get_option('rj_show_youtube');
+
+			$link  = $facebook ? '<li><a target="_blank" href="'.$facebook.'"><i class="fa fa-facebook"></i></a></li>' : '';
+			$link .= $twitter ? '<li><a target="_blank" href="'.$twitter.'"><i class="fa fa-twitter"></i></a></li>' : '';
+			$link .= $linkedin ? '<li><a target="_blank" href="'.$linkedin.'"><i class="fa fa-linkedin"></i></a></li>' : '';
+			$link .= $google ? '<li><a target="_blank" href="'.$google.'"><i class="fa fa-google-plus"></i></a></li>' : '';
+			$link .= $pinterest ? '<li><a target="_blank" href="'.$pinterest.'"><i class="fa fa-pinterest"></i></a></li>' : '';
+			$link .= $youtube ? '<li><a target="_blank" href="'.$youtube.'"><i class="fa fa-youtube"></i></a></li>' : '';
+			$link .= $tumblr ? '<li><a target="_blank" href="'.$tumblr.'"><i class="fa fa-tumblr"></i></a></li>' : '';
+			$link .= $reddit ? '<li><a target="_blank" href="'.$reddit.'"><i class="fa fa-reddit"></i></a></li>' : '';
+			$link .= $skype ? '<li><a target="_blank" href="'.$skype.'"><i class="fa fa-skype"></i></a></li>' : '';
+			$link .= $flickr ? '<li><a target="_blank" href="'.$flickr.'"><i class="fa fa-flickr"></i></a></li>' : '';
 			
-			
-
-			
-
-			$facebook = get_option('rj_show_facebook') ? (get_option('rj_facebook')?get_option('rj_facebook'):'http://www.facebook.com') : ''; 
-
-			$twitter = get_option('rj_show_twitter') ? (get_option('rj_twitter')? get_option('rj_twitter'):'http://www.twitter.com') : '';
-			$linkedin = get_option('rj_show_linkedin') ? (get_option('rj_linkedin') ? get_option('rj_linkedin'): 'http://www.linkedin.com')  : '';
-
-			$google = get_option('rj_show_google') ? (get_option('rj_google_plus')? get_option('rj_google_plus'): 'http://plus.google.com') : '';
-
-			$pinterest = get_option('rj_show_pinterest') ? get_option('rj_pinterest') : '';
-
-			$youtube = $youtube ? (get_option('rj_youtube') ? get_option('rj_youtube') : 'http://www.youtube.com') : '';
-
-			$link = $facebook ? '<li><a href="'.$facebook.'"><i class="fa fa-facebook"></i></a></li>' : '';
-			$link .= $twitter ? '<li><a href="'.$twitter.'"><i class="fa fa-twitter"></i></a></li>' : '';
-			$link .= $linkedin ? '<li><a href="'.$linkedin.'"><i class="fa fa-linkedin"></i></a></li>' : '';
-			$link .= $google ? '<li><a href="'.$google.'"><i class="fa fa-google-plus"></i></a></li>' : '';
-			$link .= $pinterest ? '<li><a href="'.$pinterest.'"><i class="fa fa-pinterest"></i></a></li>' : '';
-			$link .= $youtube ? '<li><a href="'.$youtube.'"><i class="fa fa-youtube"></i></a></li>' : '';
 			
 			echo $args['before_widget'];
 			echo $args['before_title'].$title.$args['after_title'];
@@ -146,40 +145,21 @@ function Rj_register_field_for_social_media(){
 	add_settings_field('rj_youtube', 'Youtube chanel link', 'youtube_callback', 'rj_social_option', 'rj_send_field');	
 	register_setting('rj_send_field', 'rj_youtube');
 
+	// Tumblr
+	add_settings_field('rj_tumblr', 'Tumblr', 'tumblr_callback', 'rj_social_option', 'rj_send_field');	
+	register_setting('rj_send_field', 'rj_tumblr');
+	// Skype
+	add_settings_field('rj_skype', 'Skype', 'skype_callback', 'rj_social_option', 'rj_send_field');	
+	register_setting('rj_send_field', 'rj_skype');
+	// Riddit
+	add_settings_field('rj_reddit', 'Reddit', 'reddit_callback', 'rj_social_option', 'rj_send_field');	
+	register_setting('rj_send_field', 'rj_reddit');
+	// Flickr
+	add_settings_field('rj_flickr', 'Flickr', 'flickr_callback', 'rj_social_option', 'rj_send_field');	
+	register_setting('rj_send_field', 'rj_flickr');
+
 	
 
-	// ========================== show callback field =====================================
-	//==========================================================================================
-
-	add_settings_field('rj_divide', '', 'alert_callback', 'rj_social_option', 'rj_send_field');	
-	register_setting('rj_send_field', 'rj_devide');
-
-	add_settings_field('rj_show_facebook', 'Show Facebook', 'show_facebook_callback', 'rj_social_option', 'rj_send_field');	
-	register_setting('rj_send_field', 'rj_show_facebook');
-
-	add_settings_field('rj_show_twitter', 'Show Twitter', 'show_twitter_callback', 'rj_social_option', 'rj_send_field');	
-	register_setting('rj_send_field', 'rj_show_twitter');
-
-	add_settings_field('rj_show_linkedin', 'Show Linkedin', 'show_linkedin_callback', 'rj_social_option', 'rj_send_field');	
-	register_setting('rj_send_field', 'rj_show_linkedin');
-
-	add_settings_field('rj_show_google', 'Show Google Plus', 'show_google_callback', 'rj_social_option', 'rj_send_field');	
-	register_setting('rj_send_field', 'rj_show_google');
-
-	add_settings_field('rj_show_pinterest', 'Show Pinterest', 'show_pinterest_callback', 'rj_social_option', 'rj_send_field');	
-	register_setting('rj_send_field', 'rj_show_pinterest');
-
-	add_settings_field('rj_show_youtube', 'Show Youtube', 'show_youtube_callback', 'rj_social_option', 'rj_send_field');	
-	register_setting('rj_send_field', 'rj_show_youtube');
-
-	//==================================== Design ==========================================
-	//======================================================================================
-
-	add_settings_field('rj_design_alert', '', 'design_alert_callback', 'rj_social_option', 'rj_send_field');	
-	register_setting('rj_send_field', 'rj_design_alert');
-
-	add_settings_field('rj_desing', '', 'default_callback', 'rj_social_option', 'rj_send_field');	
-	register_setting('rj_send_field', 'rj_desing');
 }
 add_action('admin_init', 'Rj_register_field_for_social_media');
 
@@ -226,9 +206,27 @@ function youtube_callback(){ ?>
 <?php
 }
 
+// tumblr callback 
+function tumblr_callback(){ ?>
+	<input type="text" name="rj_tumblr" value="<?php echo esc_url(get_option('rj_tumblr')); ?>" class="regular-text" />
+<?php
+}
+function skype_callback(){ ?>
+	<input type="text" name="rj_skype" value="<?php echo esc_url(get_option('rj_skype')); ?>" class="regular-text" />
+<?php
+}
+function reddit_callback(){ ?>
+	<input type="text" name="rj_reddit" value="<?php echo esc_url(get_option('rj_reddit')); ?>" class="regular-text" />
+<?php
+}
+function flickr_callback(){ ?>
+	<input type="text" name="rj_flickr" value="<?php echo esc_url(get_option('rj_flickr')); ?>" class="regular-text" />
+<?php
+}
+
 // Background color select callback
 function smw_bg_callback(){ ?>
-	<input type="text" name="rj_smw_bg" value="<?php echo get_option('rj_smw_bg'); ?>" class="regular-text color-picker" />
+	<input type="text" placeholder="Click here to select BG color" name="rj_smw_bg" value="<?php echo get_option('rj_smw_bg'); ?>" class="regular-text color-picker" />
 <?php
 }
 // Background color select callback
@@ -268,59 +266,9 @@ function smw_icon_style_callback(){
 <?php
 }
 
-/*
-===================================================================================================
-::::::::::::::::::::::::::::::: SHOW OR HIDE SOCIAL MEDIA LINK CALLBACK ::::::::::::::::::::::::::::
-====================================================================================================
-*/
-
-function alert_callback(){
-	echo "<h3>Select which network you want to show . please show max 4 items</h3>";
-}
-
-function show_facebook_callback(){
-	?>
-		<input type="checkbox" name="rj_show_facebook" <?php checked(get_option('rj_show_facebook'), 1) ?> value="1" />
-	<?php
-}
-
-function show_twitter_callback(){
-	?>
-		<input type="checkbox" name="rj_show_twitter" <?php checked(get_option('rj_show_twitter'), 1) ?> value="1" />
-	<?php
-}
-
-function show_linkedin_callback(){
-	?>
-		<input type="checkbox" name="rj_show_linkedin" <?php checked(get_option('rj_show_linkedin'), 1) ?> value="1" />
-	<?php
-}
 
 
-function show_google_callback(){
-	?>
-		<input type="checkbox" name="rj_show_google" <?php checked(get_option('rj_show_google'), 1) ?> value="1" />
-	<?php
-}
-function show_pinterest_callback(){
-	?>
-		<input type="checkbox" name="rj_show_pinterest" <?php checked(get_option('rj_show_pinterest'), 1) ?> value="1" />
-	<?php
-}
 
-function show_youtube_callback(){
-	?>
-		<input type="checkbox" name="rj_show_youtube" <?php checked(get_option('rj_show_youtube'), 1) ?> value="1" />
-	<?php
-}
-/*
-========================================================================================
-::::::::::::::::::::::::::::::::: Desing Callback :::::::::::::::::::::::::::::::::::::::
-=========================================================================================
-*/
-function design_alert_callback(){
-	echo "<h4>Select a design thats you like.</h4>";
-}
 /*
 function default_callback(){
 	$design = esc_html(get_option('rj_desing')) ? esc_html(get_option('rj_desing')): 'square';
@@ -350,14 +298,14 @@ function rj_send_callback(){
 //Create Menu
 function Rj_create_menu(){
 	$admin = 'manage_options';
-	add_menu_page('Social Media Options', 'Social Option', $admin, 'rj_social_option', 'Rj_menu_callback', '', '58' );
+	add_menu_page('RJ smw Options', 'RJ smw Options', $admin, 'rj_social_option', 'Rj_menu_callback', '', '58' );
 }
 add_action('admin_menu', 'Rj_create_menu');
 
 //  Menu options callback // menu items callback
 function Rj_menu_callback(){ ?>
 		<?php echo settings_errors(); ?>
-	<h1>Widget Social media Options</h1>
+	<h1>RJ SMW Options</h1>
 	<form class="rj_form" action="options.php" method="POST">
 		<?php
 			do_settings_sections('rj_social_option');
@@ -373,7 +321,7 @@ function Rj_menu_callback(){ ?>
 
 function rj_smw_add_css(){
 
-	echo $custom_bg = get_option("rj_smw_is_bg");
+	$custom_bg = get_option("rj_smw_is_bg");
 	if($custom_bg == 'true'){
 		$bg = get_option('rj_smw_bg');
 	}else {
@@ -384,11 +332,10 @@ function rj_smw_add_css(){
 		ul.rj_smw li a i.fa {
 			background: <?php echo $bg; ?>;
 		}
-		
+
 
 	</style>
 
 	<?php
-	echo $custom_bg;
 }
 add_action("wp_head", "rj_smw_add_css");
